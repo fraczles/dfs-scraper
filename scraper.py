@@ -90,7 +90,7 @@ def field_from_row(row, field):
 def build_player_kwargs(row):
     # Hard code all values here for now
     full_name = field_from_row(row, 'name').text.strip()
-    if any(full_name) is False:
+    if any(full_name) is False or len(full_name.split()) < 2:
         full_name = "unknown unknown"
     salary = field_from_row(row, 'salary').attrs['data-salary'].strip()
     points = field_from_row(row, 'points').attrs['data-points'].strip()
@@ -153,7 +153,7 @@ def generate_csv(players):
     goalies = [g for g in players if g.position == "G"]
 
     log("Generating CSVs...", action="csv")
-    with open('./data/skaters.csv', 'w') as skaterscsv:
+    with open('./skaters.csv', 'w') as skaterscsv:
         writer = csv.writer(skaterscsv)
         writer.writerow(CONFIG['skater_headers'])
         for skater in skaters:
@@ -169,7 +169,7 @@ def generate_csv(players):
                 skater.points,
             ])
 
-    with open('./data/goalies.csv', 'w') as goaliecsv:
+    with open('./goalies.csv', 'w') as goaliecsv:
         writer = csv.writer(goaliecsv)
         writer.writerow(CONFIG['goalie_headers'])
         for goalie in goalies:
@@ -191,5 +191,5 @@ def main():
     generate_csv(players)
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     main()
